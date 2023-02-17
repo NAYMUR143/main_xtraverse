@@ -7,7 +7,6 @@ import Image from "next/image";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import Edithero from "../../../../components/dashboard/edithome/edithero";
-import Editsales from "../../../../components/dashboard/edithome/Editsales";
 import Editfeature from "../../../../components/dashboard/edithome/editfeature";
 import Editwaitlist from "../../../../components/dashboard/edithome/waitlistLayout/editwailist";
 import EditFAQ from "../../../../components/dashboard/edithome/editfaq";
@@ -147,7 +146,6 @@ function EditHome() {
       setBlur3={setBlur3}
       key="1"
     />,
-    // <Editsales handleNext={handleNext} key="2" />,
     // <Editfeature handleNext={handleNext} key="3" />,
     // <Editwaitlist handleNext={handleNext} key="4" />,
     // <EditFAQ handleNext={handleNext} key="5" />,
