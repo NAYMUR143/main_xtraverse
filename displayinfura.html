@@ -1,0 +1,24 @@
+ </head>
+  <body>
+    <form>
+      <!-- your form content here -->
+    </form>
+
+    <script src="./nft-metadata.js"></script>
+    <script>
+      const contractAddress = '0x1aB14B36Ca49DA30985dAC3383f06525ad8A3F0B';
+      const tokenId = 1;
+
+      getNFTMetadata(contractAddress, tokenId)
+        .then((metadata) => {
+          console.log(metadata);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    </script>
+  </body>
+</html>
+Assuming that your JavaScript file is named "nft-metadata.js" and is in the same directory as your HTML file, you can include it in the HTML file using the script tag. This code will call the getNFTMetadata function and log the resulting metadata to the console. You can customize the
+
+
