@@ -39,8 +39,11 @@ const Wrapper = styled.div`
 `;
 const Step = styled.div`
   text-align: center;
+  color: #fff;
+
   h1 {
     font-weight: 800;
+    color: #fff;
   }
 `;
 
