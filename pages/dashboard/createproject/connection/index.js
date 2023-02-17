@@ -26,6 +26,7 @@ const Connectionsec = styled.div`
   h1 {
     text-align: center;
     margin: 5px 0px 20px;
+    color: #fff;
   }
   .img {
     width: 60px;
