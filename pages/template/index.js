@@ -1,12 +1,21 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import shadow from "../../components/images/shadow.svg";
-import logo from "../../components/images/tepmplatelogo.svg";
-
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { Button } from "@mui/material";
 import firstimg from "../../components/images/project1.png";
 import Link from "next/link";
+import TemplateHeader from "./templateheader";
 const Main = styled.div`
   background: #fff;
   height: 150vh;
@@ -140,63 +149,52 @@ const HomepagePreview = styled.div`
     }
   }
 `;
-const Header = styled.header`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  left: 0px;
-  z-index: 99;
-  padding: 20px 40px;
-  .btnsc {
-    display: flex;
-    gap: 15px;
-    a {
-      text-decoration: none;
-      text-align: center;
-      color: #212121;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-      font-weight: 600;
 
-      &:last-child {
-        margin-left: 30px;
-        background: #212121;
-        border: 2px solid #212121;
-        color: #fff;
-        width: 150px;
-      }
-      &:hover {
-        text-decoration: underline;
-        &:last-child {
-          color: #000;
-          background: #fff;
-          text-decoration: none;
-        }
-      }
-    }
-  }
-`;
 function page() {
+  const [template, setTemplate] = useState([]);
+  const [heading, setHeading] = useState();
+  const [description, setDescription] = useState();
+  const [logo, setLogo] = useState();
+  const [color1, setColor1] = useState();
+  const [color2, setColor2] = useState();
+  const [color3, setColor3] = useState();
+  useEffect(() => {
+    getTemplates();
+  }, []);
+  useEffect(() => {
+    {
+      template.map((tmplte) => {
+        setHeading(tmplte.data.heading),
+          setDescription(tmplte.data.description),
+          setDescription(tmplte.data.description);
+        setLogo(tmplte.data.logo);
+        setColor1(tmplte.data.gradient.color1);
+        setColor3(tmplte.data.gradient.color2);
+        setColor2(tmplte.data.gradient.color3);
+      });
+    }
+  }, [template]);
+  function getTemplates() {
+    const templateDataRef = collection(db, "templateData");
+    getDocs(templateDataRef)
+      .then((response) => {
+        console.log(response.docs);
+        const datas = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setTemplate(datas);
+        // const tpltDt = response.
+      })
+      .catch((error) => {
+        console.log(error.messages);
+      });
+  }
+
   return (
     <Main>
       <Templatepage>
-        <Header>
-          <Link href="/">
-            <div className="logo">
-              <Image src={logo} alt="logo" />
-            </div>
-          </Link>
-
-          <div className="btnsc">
-            <Link href="/template">Marketplace</Link>
-            <Link href="/template/waitlist">Waitlist</Link>
-            <Link href="/">Connect Wallet</Link>
-          </div>
-        </Header>
+        <TemplateHeader logo={logo} />
         <HomepagePreview>
           {/* svg  */}
           <svg
@@ -212,7 +210,7 @@ function page() {
                 cy="-55"
                 r="238"
                 transform="rotate(180 711 -55)"
-                fill="url(#paint0_linear_403_33)"
+                fill={color1}
               />
             </g>
             <g filter="url(#filter1_f_403_33)">
@@ -221,7 +219,7 @@ function page() {
                 cy="-145"
                 r="238"
                 transform="rotate(180 662 -145)"
-                fill="url(#paint1_linear_403_33)"
+                fill={color3}
               />
             </g>
             <g filter="url(#filter2_f_403_33)">
@@ -230,7 +228,7 @@ function page() {
                 cy="-124"
                 r="238"
                 transform="rotate(180 392 -124)"
-                fill="#1EA573"
+                fill={color2}
               />
             </g>
             <g filter="url(#filter3_f_403_33)">
@@ -239,7 +237,7 @@ function page() {
                 cy="-107"
                 r="238"
                 transform="rotate(180 893 -107)"
-                fill="#1EA573"
+                fill={color1}
               />
             </g>
             <g filter="url(#filter4_f_403_33)">
@@ -248,7 +246,7 @@ function page() {
                 cy="-145"
                 r="238"
                 transform="rotate(180 697 -145)"
-                fill="url(#paint2_linear_403_33)"
+                fill={color3}
               />
             </g>
             <defs>
@@ -365,8 +363,8 @@ function page() {
                 y2="183"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#195F64" />
-                <stop offset="1" stop-color="#06E9FE" />
+                <stop stop-color={color1} />
+                <stop offset="1" stop-color={color2} />
               </linearGradient>
               <linearGradient
                 id="paint1_linear_403_33"
@@ -376,8 +374,8 @@ function page() {
                 y2="93"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#09FB22" />
-                <stop offset="1" stop-color="#0E5649" />
+                <stop stop-color={color3} />
+                <stop offset="1" stop-color={color1} />
               </linearGradient>
               <linearGradient
                 id="paint2_linear_403_33"
@@ -387,8 +385,8 @@ function page() {
                 y2="93"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#20BC83" />
-                <stop offset="1" stop-color="#97C45E" />
+                <stop stop-color={color2} />
+                <stop offset="1" stop-color={color3} />
               </linearGradient>
             </defs>
           </svg>
@@ -396,12 +394,8 @@ function page() {
           <div className="homesec">
             <div className="herosec">
               <div className="herotxt">
-                <h1>Robo Gremlins</h1>
-                <p>
-                  Our <strong>Fancy Shamncy NFT Project</strong> is the king of
-                  all fancy shamncy NFT projects. And we are sworn enemies of
-                  Gary V.
-                </p>
+                <h1>{heading}</h1>
+                <p>{description}</p>
                 <Button>GO TO NFTS</Button>
               </div>
               <div className="heroimgs">

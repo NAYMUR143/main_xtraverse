@@ -6,11 +6,12 @@ import styled from "@emotion/styled";
 import Grid from "@mui/material/Grid";
 import { IoMdCloudUpload } from "react-icons/io";
 import { Form, PreviewBox } from "../upladnft/uploadnft.style";
-
+import { db } from "../../../pages/firebaseConfig";
 import { RiTicketLine } from "react-icons/ri";
 import { HomepagePreview } from "./edithomepage.style";
 import firstimg from "../../images/project1.png";
 import { useRouter } from "next/router";
+import { addDoc, collection } from "firebase/firestore";
 function Edithero(props) {
   const {
     handleNext,
@@ -28,6 +29,26 @@ function Edithero(props) {
     setBlur3,
   } = props;
   const router = useRouter();
+  const userDataCollectionRef = collection(db, "templateData");
+  const handleDataSubmit = () => {
+    addDoc(userDataCollectionRef, {
+      logo: homeLogo,
+      heading: editHeroName,
+      description: editHeroScript,
+      gradient: {
+        color1: blur1,
+        color2: blur2,
+        color3: blur3,
+      },
+    })
+      .then(() => {
+        if (!alert("Form Submitted Succesfully!!!"));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Box
@@ -92,7 +113,7 @@ function Edithero(props) {
                         type="file"
                         placeholder="upload Logo"
                         onChange={handleImageChange}
-                        accept="image/png, image/jpeg, image/jpg, image/gif"
+                        accept="image/*"
                       />
                       <span>
                         Upload Logo
@@ -135,6 +156,7 @@ function Edithero(props) {
                         background: "#fff",
                       },
                     }}
+                    onClick={handleDataSubmit}
                   >
                     Update
                   </Button>
@@ -202,7 +224,7 @@ function Edithero(props) {
                       cy="-55"
                       r="238"
                       transform="rotate(180 711 -55)"
-                      fill="url(#paint0_linear_403_33)"
+                      fill={blur3}
                     />
                   </g>
                   <g filter="url(#filter1_f_403_33)">
@@ -211,7 +233,7 @@ function Edithero(props) {
                       cy="-145"
                       r="238"
                       transform="rotate(180 662 -145)"
-                      fill="url(#paint1_linear_403_33)"
+                      fill={blur1}
                     />
                   </g>
                   <g filter="url(#filter2_f_403_33)">
@@ -238,7 +260,7 @@ function Edithero(props) {
                       cy="-145"
                       r="238"
                       transform="rotate(180 697 -145)"
-                      fill="url(#paint2_linear_403_33)"
+                      fill={blur3}
                     />
                   </g>
                   <defs>

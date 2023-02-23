@@ -54,9 +54,14 @@ function Uploadnfts() {
   const [nftType, setNftType] = useState("");
   const [tokenType, setTokenType] = useState("");
   const [mintType, setMintType] = useState("");
+
+  // for upload image to firebase
+  const [uploadImage, setUploadImage] = useState(null);
+
   // for image url
   const [selectedImage, setSelectedImage] = useState();
   const handleImageChange = (event) => {
+    setUploadImage(event.target.files[0]);
     const imageFile = event.target.files[0];
     setSelectedImage(imageFile);
     const reader = new FileReader();
@@ -121,6 +126,12 @@ function Uploadnfts() {
       setTokenType={setTokenType}
       mintType={mintType}
       setMintType={setMintType}
+      nftCollectionName={nftCollectionName}
+      addNftDescript={addNftDescript}
+      nftPrice={nftPrice}
+      nftMindBtn={nftMindBtn}
+      uploadImage={uploadImage}
+      setUploadImage={setUploadImage}
       key="2"
     />,
   ];

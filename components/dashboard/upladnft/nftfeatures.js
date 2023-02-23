@@ -11,7 +11,9 @@ import { Form, PreviewBox } from "./uploadnft.style";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaPercent } from "react-icons/fa";
-
+import { db, storage } from "../../../pages/firebaseConfig";
+import { addDoc, collection, ref, uploadBytes } from "firebase/firestore";
+import { v4 } from "uuid";
 function Nftfeaures(props) {
   const {
     handlePrev,
@@ -29,9 +31,16 @@ function Nftfeaures(props) {
     setTokenType,
     mintType,
     setMintType,
+    nftCollectionName,
+    addNftDescript,
+    nftPrice,
+    nftMindBtn,
+    imageUpload,
+    uploadImage,
+    setUploadImage,
   } = props;
   const router = useRouter();
-  console.log(tokenType, mintType);
+  // console.log(tokenType, mintType);
   // const handleSubmitAllData = async (e) => {
   //   e.preventDefault();
   //   const allData = {
@@ -55,7 +64,34 @@ function Nftfeaures(props) {
   //     console.log("Error", error);
   //   }
   // };
-
+  // send data to firebase
+  const userDataCollectionRef = collection(db, "uploadNfts");
+  const handleDataSubmit = () => {
+    if (uploadImage == nul) return;
+    const imageRef = ref(storage, `images/${uploadImage.name + v4()}`);
+    uploadBytes(imageRef, uploadImage).then(() => {
+      alert("image upload");
+    });
+    addDoc(userDataCollectionRef, {
+      nftname: nftName,
+      collectionName: nftCollectionName,
+      description: addNftDescript,
+      // nftimage: selectedImage,
+      price: nftPrice,
+      button: nftMindBtn,
+      token: tokenType,
+      mint: mintType,
+      videoTitle: videoTitle,
+      // video: selectedVideoUrl,
+      videoStory: addStory,
+    })
+      .then(() => {
+        if (!alert("Form Submitted Succesfully!!!"));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleSubmitAllData = (e) => {
     e.preventDefault();
     router.push("/dashboard/createproject/edithomepage");
@@ -179,6 +215,25 @@ function Nftfeaures(props) {
                   </div>
                 </Box>
               </Grid>
+              <Grid item xs={12}>
+                <Button
+                  sx={{
+                    background: "crimson",
+                    border: "2px solid crimson",
+                    width: "100%",
+                    display: "block",
+                    height: "50px",
+                    color: "#fff",
+                    marginBottom: "15px",
+                  }}
+                  onClick={() => {
+                    handleDataSubmit, imageUpload;
+                  }}
+                >
+                  update
+                </Button>
+              </Grid>
+
               <Grid item xs={12}>
                 <Grid container spacing={{ lg: 2, xl: 4 }}>
                   <Grid item xs={4}>
